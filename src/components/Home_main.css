@@ -1,0 +1,40 @@
+
+.temp{
+
+    font-size: x-large;
+    font-weight: 500;
+    word-spacing: 2%;
+    color:#1b8a4b;
+
+}
+.jb{
+    color:#14adcc;
+}
+.temp2{
+    font-size:xxx-large;
+}
+.temp3{
+    font-size: large;
+    margin-top: 3%;
+}
+
+.btn-container{
+    width:50%;
+    display:flex;
+    direction: row;
+    justify-content: space-between;
+    margin-top: 20%;
+}
+.btn{
+    height:35px;
+    width:125px;
+    background-color:#197f62;
+    border-radius: 20px;
+    color:white;
+}
+
+
+.image{
+    height:90%;
+    margin-top: 16.6%;
+}
