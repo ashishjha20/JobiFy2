@@ -10,6 +10,8 @@ const Hiring = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hoveredJob, setHoveredJob] = useState(null); // State for hovered job
+  const [selectedJob, setSelectedJob] = useState(null); // State for selected job
+  const [candidates, setCandidates] = useState([]); // State for interested candidates
   const navigate = useNavigate(); // Initialize useNavigate
 
   function AddjobHandler() {
@@ -43,6 +45,28 @@ const Hiring = () => {
     }
   };
 
+  // Function to fetch candidates interested in a specific job
+  const getInterestedCandidates = async (job) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/candidates/${job.jobId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch interested candidates");
+      }
+
+      const data = await response.json();
+      setCandidates(data.candidates || []); // Assuming your API response has a 'candidates' field
+      setSelectedJob(job); // Set the selected job to display
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   useEffect(() => {
     getAllData(); // Fetch data when the component mounts
   }, []); // Empty dependency array means this runs once on mount
@@ -68,9 +92,10 @@ const Hiring = () => {
                 .map((job, index) => (
                   <div
                     key={index}
-                    className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow relative"
+                    className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow relative cursor-pointer"
                     onMouseEnter={() => setHoveredJob(job)}
                     onMouseLeave={() => setHoveredJob(null)}
+                    onClick={() => getInterestedCandidates(job)} // Fetch interested candidates on click
                   >
                     <h3 className="text-xl font-semibold">{job.jobTitle}</h3>
                     <p className="text-gray-600">{job.description}</p>
@@ -99,6 +124,29 @@ const Hiring = () => {
           </div>
         </div>
       </div>
+      {/* Modal for displaying interested candidates */}
+      {selectedJob && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full relative">
+            <button
+              onClick={() => setSelectedJob(null)} // Close the modal
+              className="absolute top-2 right-4 text-gray-700 text-2xl"
+            >
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold mb-4">{selectedJob.jobTitle} - Interested Candidates</h2>
+            {candidates.length > 0 ? (
+              <ul>
+                {candidates.map((candidate, index) => (
+                  <li key={index} className="py-1">{candidate.name} - {candidate.email}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No candidates interested in this job yet.</p>
+            )}
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );
