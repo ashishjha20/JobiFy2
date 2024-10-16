@@ -25,6 +25,27 @@ const Hiring = () => {
         navigate("/view_details");
     }
 
+    function DeleteHandler(jobId) {
+        fetch(`${process.env.REACT_APP_BASE_URL}/deleteJob/${jobId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to delete job");
+            }
+            // // Optionally refresh the job list after deletion
+            getAllData();
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+    
+    
+
     // Function to fetch all job data
     const getAllData = async () => {
         try {
@@ -122,7 +143,11 @@ const Hiring = () => {
                                         <p className="mt-1 text-gray-700">Location: {job.location}</p>
                                         <p className="mt-1 text-gray-700">Salary: {job.salary || "Not specified"}</p>
                                         <p className="mt-1 text-gray-700">Work Type: {job.workType}</p>
-                                        <button> Mera button</button>
+
+                                        <button onClick={() => DeleteHandler(job._id)} className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition">
+    Delete
+</button>
+
 
                                         {hoveredJob === job && (
                                             <div className="absolute top-0 left-0 bg-gray-800 text-white p-2 rounded-lg mt-2 shadow-lg">
