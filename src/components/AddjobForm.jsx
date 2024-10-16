@@ -1,9 +1,11 @@
 // src/components/AddjobForm.js
 import React, { useState, useContext } from "react";
 import { EmailContext } from "../context/EmailContext";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const AddjobForm = () => {
   const { email } = useContext(EmailContext);
+  const navigate = useNavigate(); // Initialize navigate
 
   const [formData, setFormData] = useState({
     jobTitle: "",
@@ -30,7 +32,7 @@ const AddjobForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/addjob`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/addjobs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,6 +47,10 @@ const AddjobForm = () => {
       const result = await response.json();
       setSuccess("Job added successfully!");
       setError(null);
+
+      // Redirect to /hiring after success
+      navigate("/hiring");
+
     } catch (error) {
       setError(error.message);
       setSuccess(null);
@@ -62,6 +68,7 @@ const AddjobForm = () => {
       {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
       <div className="space-y-4">
+        {/* Job Title */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Job Title</label>
           <input
@@ -74,6 +81,7 @@ const AddjobForm = () => {
           />
         </div>
 
+        {/* Company */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Company</label>
           <input
@@ -86,6 +94,7 @@ const AddjobForm = () => {
           />
         </div>
 
+        {/* Location */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Location</label>
           <input
@@ -98,6 +107,7 @@ const AddjobForm = () => {
           />
         </div>
 
+        {/* Salary */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Salary</label>
           <input
@@ -109,6 +119,7 @@ const AddjobForm = () => {
           />
         </div>
 
+        {/* Role */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Role</label>
           <input
@@ -121,6 +132,7 @@ const AddjobForm = () => {
           />
         </div>
 
+        {/* Work Type */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Work Type</label>
           <select
@@ -137,6 +149,7 @@ const AddjobForm = () => {
           </select>
         </div>
 
+        {/* Description */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">Description</label>
           <textarea
@@ -148,6 +161,7 @@ const AddjobForm = () => {
           ></textarea>
         </div>
 
+        {/* Requirements */}
         <div>
           <label className="block text-lg font-medium text-gray-700 mb-1">
             Requirements (comma-separated)
