@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { EmailContext } from "../context/EmailContext";
+import { EmailContext } from "../context/EmailContext"; // Import the EmailContext
 
 const Hiring = () => {
     const { email } = useContext(EmailContext); // Access email from EmailContext
@@ -13,17 +13,12 @@ const Hiring = () => {
     const [selectedJob, setSelectedJob] = useState(null); // State for selected job
     const [interestedCandidates, setCandidates] = useState({}); // State for interested candidates
     const [loadingCandidates, setLoadingCandidates] = useState(false); // Loading state for candidates
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     // Navigate to 'addjob' page when button is clicked
     const addJobHandler = () => {
         navigate("/addjob");
     };
-
-    function ViewDetailsHandler(){
-        // Navigate to 'jobdetails' page when button is clicked
-        navigate("/view_details");
-    }
 
     // Function to fetch all job data
     const getAllData = async () => {
@@ -101,31 +96,31 @@ const Hiring = () => {
     return (
         <div>
             <NavBar />
-            <div className="h-[87vh] w-[100vw] bg-gradient-to-b from-white to-[#c4f3d9]">
+            <div className="h-[87vh] w-[100vw] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white from-40% to-[#c4f3d9] to-90%">
                 <div className="container mx-auto p-4">
-                    <h1 className="text-4xl font-bold text-center mb-8">Your Firm's Job Openings</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <h1 className="text-3xl font-bold text-center mb-6">Your Firm's Job Openings</h1>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {empData.length > 0 ? (
                             empData
-                                .filter(job => job.email === email)
+                                .filter(job => job.email === email) // Filter jobs by user's email from context
                                 .map((job, index) => (
                                     <div
                                         key={index}
-                                        className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow relative cursor-pointer"
+                                        className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow relative cursor-pointer"
                                         onMouseEnter={() => setHoveredJob(job)}
                                         onMouseLeave={() => setHoveredJob(null)}
-                                        onClick={() => getInterestedCandidates(job)}
+                                        onClick={() => getInterestedCandidates(job)} // Fetch interested candidates on click
                                     >
-                                        <h3 className="text-2xl font-semibold text-gray-800">{job.jobTitle}</h3>
-                                        <p className="text-gray-600 mt-2">{job.description}</p>
-                                        <p className="mt-4 font-medium text-gray-900">Company: {job.company}</p>
-                                        <p className="mt-1 text-gray-700">Location: {job.location}</p>
-                                        <p className="mt-1 text-gray-700">Salary: {job.salary || "Not specified"}</p>
-                                        <p className="mt-1 text-gray-700">Work Type: {job.workType}</p>
-                                        <button> Mera button</button>
+                                        <h3 className="text-xl font-semibold">{job.jobTitle}</h3>
+                                        <p className="text-gray-600">{job.description}</p>
+                                        <p className="mt-2 font-medium text-gray-800">Company: {job.company}</p>
+                                        <p className="mt-1">Location: {job.location}</p>
+                                        <p className="mt-1">Salary: {job.salary || "Not specified"}</p>
+                                        <p className="mt-1">Work Type: {job.workType}</p>
 
+                                        {/* Tooltip for additional info */}
                                         {hoveredJob === job && (
-                                            <div className="absolute top-0 left-0 bg-gray-800 text-white p-2 rounded-lg mt-2 shadow-lg">
+                                            <div className="absolute top-0 left-0 bg-gray-800 text-white p-2 rounded-lg mt-2">
                                                 <p>{job.requirements.join(', ') || "No specific requirements"}</p>
                                             </div>
                                         )}
@@ -135,53 +130,36 @@ const Hiring = () => {
                             <p className="text-center col-span-full">Sorry, no openings at your firm.</p>
                         )}
                     </div>
-                    <div className="text-center mt-8">
-                        <button onClick={addJobHandler} className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
+                    {/* Add Job Button */}
+                    <div className="text-center mt-6">
+                        <button onClick={addJobHandler} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
                             Add New Job
                         </button>
                     </div>
                 </div>
             </div>
-
+            {/* Modal for displaying interested candidates */}
             {selectedJob && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full relative">
+                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full relative">
                         <button
                             onClick={() => setSelectedJob(null)} // Close the modal
                             className="absolute top-2 right-4 text-gray-700 text-2xl"
                         >
                             &times;
                         </button>
-                        <h2 className="text-3xl font-bold mb-6">{selectedJob.jobTitle} - Interested Candidates</h2>
+                        <h2 className="text-2xl font-bold mb-4">{selectedJob.jobTitle} - Interested Candidates</h2>
                         {loadingCandidates ? (
                             <p>Loading interested candidates...</p>
                         ) : (
                             <ul>
                                 <li>
-    <p><strong>Company:</strong> {selectedJob.company}</p>
-    <p><strong>Email:</strong> {interestedCandidates[firstKey][0].companyEmail || "N/A"}</p>
-    <p><strong>Created Date:</strong> {new Date(interestedCandidates[firstKey][0].createdDate).toLocaleString()}</p>
-    <p><strong>Job Title:</strong> {selectedJob.jobTitle}</p>
-    <p><strong>Interested Candidate Emails:</strong></p>
-    <ul className="list-disc ml-6 mt-2 space-y-4 max-h-60 overflow-y-scroll"> {/* Add scroll with fixed height */}
-    {emails.map((email, idx) => (
-        <div key={idx} className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <li className="font-medium">{email}</li> {/* Email displayed above */}
-            <div className="mt-4 flex space-x-3 justify-start"> {/* Buttons are now below the email */}
-                <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out">
-                    Hire
-                </button>
-                <button onClick={ViewDetailsHandler} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">
-                    View Details
-                </button>
-            </div>
-        </div>
-    ))}
-</ul>
-
-</li>
-
-
+                                    <p><strong>Company:</strong> {selectedJob.company}</p>
+                                    <p><strong>Email:</strong> {interestedCandidates[firstKey][0].companyEmail|| "N/A"}</p>
+                                    <p><strong>Created Date:</strong> {new Date(interestedCandidates[firstKey][0].createdDate).toLocaleString()}</p>
+                                    <p><strong>Job Title:</strong> {selectedJob.jobTitle}</p>
+                                    <p><strong>Interested Candidate Emails:</strong> {emails.join(', ') || "None"}</p>
+                                </li>
                             </ul>
                         )}
                     </div>

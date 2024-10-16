@@ -8,6 +8,7 @@ import Hiring from "./pages/Hiring"
 import Seeking from './pages/Seeking'
 import Addjob from './pages/Addjob';
 import Build_profile from "./pages/Build_profile"
+import ViewDetails from "./pages/ViewDetails"
 
 
 
@@ -23,6 +24,7 @@ function App() {
     <Route path="/seeking" element={<Seeking/>}/>
     <Route path="/addjob" element={<Addjob/>}/>
     <Route path="/build-profile" element={<Build_profile/>}/>
+    <Route path="/view_details" element={<ViewDetails/>}/>
     
 
    </Routes>
