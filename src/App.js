@@ -12,6 +12,7 @@ import ViewDetails from "./pages/ViewDetails"
 
 
 
+
 function App() {
   return (
    <Routes>
@@ -24,7 +25,7 @@ function App() {
     <Route path="/seeking" element={<Seeking/>}/>
     <Route path="/addjob" element={<Addjob/>}/>
     <Route path="/build-profile" element={<Build_profile/>}/>
-    <Route path="/view_details" element={<ViewDetails/>}/>
+    <Route path="/view_details/:email" element={<ViewDetails/>}/>
     
 
    </Routes>

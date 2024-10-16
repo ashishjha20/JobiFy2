@@ -20,9 +20,8 @@ const Hiring = () => {
         navigate("/addjob");
     };
 
-    function ViewDetailsHandler(){
-        // Navigate to 'jobdetails' page when button is clicked
-        navigate("/view_details");
+    function ViewDetailsHandler(candidateEmail) {
+        navigate(`/view_details/${candidateEmail}`); 
     }
 
     function DeleteHandler(jobId) {
@@ -196,7 +195,7 @@ const Hiring = () => {
                 <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out">
                     Hire
                 </button>
-                <button onClick={ViewDetailsHandler} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">
+                <button onClick={() => ViewDetailsHandler(email)} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">
                     View Details
                 </button>
             </div>
