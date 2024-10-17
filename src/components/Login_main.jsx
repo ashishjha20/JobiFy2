@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { EmailContext } from "../context/EmailContext"; // Import EmailContext
+import { EmailContext } from "../context/EmailContext";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; // Import the toast styles
 
 const Login_main = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const { setEmail } = useContext(EmailContext); // Use the context to store email
+  const { setEmail } = useContext(EmailContext);
 
   const userLogin = async (data) => {
     try {
@@ -17,18 +19,29 @@ const Login_main = () => {
         },
         body: JSON.stringify(data),
       });
-
+  
       if (response.ok) {
         const result = await response.json();
         setEmail(data.email); // Store email in context
+        toast.success("Login successful!", {
+          position: "top-right", // Use string instead of toast.POSITION
+          autoClose: 2000,
+        });
         navigate("/dashboard");
       } else {
-        console.error("Login failed");
+        toast.error("Login failed. Please check your credentials.", {
+          position: "top-right", // Use string instead of toast.POSITION
+          autoClose: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("An error occurred. Please try again later.", {
+        position: "top-right", // Use string instead of toast.POSITION
+        autoClose: 3000,
+      });
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center h-[87vh] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white from-40% to-[#c4f3d9] to-90%">
@@ -74,6 +87,8 @@ const Login_main = () => {
           Login
         </button>
       </form>
+
+      <ToastContainer /> {/* Add ToastContainer to render the toasts */}
     </div>
   );
 };

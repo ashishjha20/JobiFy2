@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; // Import the toast styles
 
 const Register_main = () => {
   const { register, handleSubmit } = useForm();
@@ -18,12 +20,24 @@ const Register_main = () => {
 
       if (response.ok) {
         const result = await response.json();
-        navigate('/login');
+        await toast.success("Registration successful!", {
+          position: "top-right", // Use string instead of toast.POSITION
+          autoClose: 2000, // Auto close after 2 seconds
+        });
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       } else {
-        console.error("Registration failed");
+        toast.error("Registration failed. Please try again.", {
+          position: "top-right", // Use string instead of toast.POSITION
+          autoClose: 3000,
+        });
       }
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("An error occurred. Please try again later.", {
+        position: "top-right", // Use string instead of toast.POSITION
+        autoClose: 3000,
+      });
     }
   };
 
@@ -106,6 +120,8 @@ const Register_main = () => {
           Register
         </button>
       </form>
+
+      <ToastContainer /> {/* Add ToastContainer to render the toasts */}
     </div>
   );
 };
